@@ -1,0 +1,122 @@
+/* Importa uma fonte moderna do Google */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* Estilo geral da página: centraliza o conteúdo vertical e horizontalmente */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f2f5; /* Fundo cinza bem claro */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Títulos */
+h2 {
+    color: #1a73e8; /* Azul estilo corporativo */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* O "Cartão" branco para os formulários */
+form {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ajuste nos textos que ficam antes dos inputs (Email:, Senha:) */
+form br {
+    display: none; /* Esconde os <br> do seu HTML original para um visual mais limpo */
+}
+
+/* Estilizando os campos de digitação */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    padding: 12px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+    width: calc(100% - 24px); /* Ajuste de padding */
+}
+
+input:focus {
+    border-color: #1a73e8;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+}
+
+/* Botão padrão */
+button {
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #1557b0;
+}
+
+/* Links (Criar conta, Esqueci a senha) */
+a {
+    color: #1a73e8;
+    text-decoration: none;
+    font-size: 14px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Mensagens de erro e sucesso */
+.mensagem {
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 14px;
+    width: 100%;
+    max-width: 350px;
+}
+
+.erro {
+    background-color: #fce8e6;
+    color: #d93025;
+    border: 1px solid #fad2cf;
+}
+
+.sucesso {
+    background-color: #e6f4ea;
+    color: #1e8e3e;
+    border: 1px solid #ceead6;
+}
+
+/* Pequenos textos de ajuda */
+small {
+    color: #5f6368;
+    font-size: 12px;
+    margin-bottom: 15px;
+    display: block;
+}

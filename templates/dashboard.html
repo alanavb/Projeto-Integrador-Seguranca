@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Segurança da Informação</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h2>Bem-vindo(a)!</h2>
+
+    <div style="background: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; display: flex; flex-direction: column; align-items: center;">
+        <p style="margin-bottom: 20px; font-weight: 500;">
+            Usuário Autenticado:<br> 
+            <span style="color: #1a73e8;">{{ email }}</span>
+        </p>
+
+        <a href="/logout" style="background-color: #d93025; color: white; padding: 10px 20px; border-radius: 4px; text-decoration: none; width: calc(100% - 40px); font-weight: 500; transition: 0.3s;">
+            Sair do Sistema
+        </a>
+    </div>
+
+</body>
+</html>

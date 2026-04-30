@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Redefinição de Senha </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h2>Redefinir Senha</h2>
+
+    {% if erro %}
+        <div class="mensagem erro">{{ erro }}</div>
+    {% endif %}
+
+    <form method="POST" action="/resetar">
+        <input type="hidden" name="token" value="{{ token }}">
+        <input type="hidden" name="email" value="{{ email }}">
+
+        <p style="text-align: center; margin-bottom: 20px;">
+            Usuário: <br><strong>{{ email }}</strong>
+        </p>
+
+        <label>Nova senha:</label>
+        <input type="password" name="senha" required>
+        
+        <small>
+            Siga os requisitos de senha forte (mínimo 8 caracteres, maiúscula, número e símbolo).
+        </small>
+
+        <button type="submit">Redefinir Senha</button>
+    </form>
+
+    <a href="/">Voltar ao login</a>
+
+</body>
+</html>

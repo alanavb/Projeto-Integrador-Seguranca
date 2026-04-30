@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h2>Cadastro</h2>
+
+    {% if erro %}
+        <div class="mensagem erro">{{ erro }}</div>
+    {% endif %}
+
+    <form method="POST" id="formCadastro" novalidate>
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" value="{{ email or '' }}" autocomplete="username" required>
+
+        <label for="senha">Senha:</label>
+        <input type="password" name="senha" id="senha" autocomplete="new-password" required>
+
+        <small>
+            A senha deve conter:
+            <ul>
+                <li>Mínimo de 8 caracteres</li>
+                <li>Pelo menos 1 letra maiúscula</li>
+                <li>Pelo menos 1 número</li>
+                <li>Pelo menos 1 caractere especial (!@#$%&*)</li>
+            </ul>
+        </small>
+
+        <label for="confirmar">Confirmar Senha:</label>
+        <input type="password" name="confirmar" id="confirmar" autocomplete="new-password" required>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <a href="/">Já tem conta? Fazer login</a>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const email = document.getElementById("email");
+            const senha = document.getElementById("senha");
+            const confirmar = document.getElementById("confirmar");
+            const form = document.getElementById("formCadastro");
+
+            email.addEventListener("keydown", function (e) {
+                if (e.key === "Enter") { e.preventDefault(); senha.focus(); }
+            });
+            senha.addEventListener("keydown", function (e) {
+                if (e.key === "Enter") { e.preventDefault(); confirmar.focus(); }
+            });
+            confirmar.addEventListener("keydown", function (e) {
+                if (e.key === "Enter") { e.preventDefault(); form.requestSubmit(); }
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Ativar 2FA </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h2>Ative seu 2FA</h2>
+
+    <form method="POST" action="/qr-confirm" style="align-items: center; text-align: center;">
+        <small>1. Abra o Google Authenticator</small>
+        <small>2. Escaneie o QR Code abaixo</small>
+
+        <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code 2FA" style="width: 200px; height: 200px; margin: 15px 0; border: 1px solid #ccc; padding: 10px; border-radius: 8px;" />
+
+        <button type="submit" style="margin-top: 15px;">Já escaneei o QR Code</button>
+    </form>
+
+</body>
+</html>
