@@ -12,48 +12,77 @@ Desenvolver, implementar, documentar e comunicar cientificamente um sistema segu
  
 ## Tecnologias Utilizadas
  
-O desenvolvimento foi realizado utilizando Python como linguagem principal, com o framework Flask para construção da aplicação web. O banco de dados utilizado foi o MySQL, responsável pelo armazenamento das credenciais e informações dos usuários.
+- **Python** – linguagem principal  
+- **Flask** – framework web  
+- **MySQL** – banco de dados relacional  
+- **bcrypt** – hash seguro de senhas  
+- **PyOTP** – autenticação em dois fatores (2FA)  
+- **qrcode** – geração de QR Code para autenticação  
+- **cryptography (Fernet)** – criptografia de dados sensíveis em repouso  
+- **python-dotenv** – gerenciamento de variáveis de ambiente  
+- **email-validator** – validação de e-mails  
  
-Também foram utilizadas bibliotecas específicas de segurança, como bcrypt para criptografia de senhas, PyOTP para autenticação em dois fatores via código temporário e QRCode para geração do QR Code utilizado no Google Authenticator.
+## Estrutura do Projeto (MVC)
  
-## Estrutura do Projeto
+O projeto segue o padrão arquitetural **MVC (Model–View–Controller)** para melhor organização, separação de responsabilidades e escalabilidade.
  
-│── app.py \
-│── requirements.txt \
-│── .env \
-│── templates/ \
-│   ├── login.html \
-│   ├── cadastro.html \
-│   ├── 2fa.html \
-│   ├── qr.html \
-│   ├── dashboard.html \
-│   ├── recuperacao.html \
-│   └── resetar.html
- 
-O sistema é composto por arquivos principais responsáveis pela lógica da aplicação, dependências e páginas web.
- 
-- app.py – aplicação principal em Flask  
-- requirements.txt – bibliotecas utilizadas  
-- templates/ – páginas HTML do sistema  
+│── app.py # Arquivo principal da aplicação, responsável por iniciar o servidor Flask, configurar sessões, segurança e registrar os controllers
+│── requirements.txt # Define as bibliotecas necessárias para rodar o projeto.
+│── .env # Arquivo de variáveis de ambiente utilizado para armazenar dados sensíveis
+│
+├── controllers/ # Gerencia o fluxo da aplicação: recebe requisições, aciona a lógica de negócio e retorna a resposta ao usuário.
+│ └── auth_controller.py
+│
+├── models/ # Responsável pela comunicação com o banco de dados.
+│ └── user_model.py
+│
+├── services/ # Responsável por funções auxiliares como validação de dados e criptografia.
+│ ├── crypto_service.py # Realiza criptografia e descriptografia de dados sensíveis, garantindo a proteção de informações como códigos de autenticação e backup.
+│ └── validation_service.py # Valida dados de entrada, assegurando conformidade com regras de segurança.
+│
+├── database/ # Responsável pela configuração e gerenciamento da conexão com o banco de dados.
+│ └── connection.py # Centraliza a conexão com o banco (MySQL), utilizando variáveis de ambiente para maior segurança.
+│
+├── templates/
+│ ├── login.html
+│ ├── cadastro.html
+│ ├── 2fa.html
+│ ├── qr.html
+│ ├── dashboard.html
+│ ├── recuperacao.html
+│ └── resetar.html
+│
+└── static/ # Armazena arquivos estáticos da aplicação
+
+### Organização:
+- **Model** → acesso ao banco de dados  
+- **View** → interface (HTML)  
+- **Controller** → regras de negócio e rotas  
+- **Services** → validações e criptografia   
  
 ## Funcionalidades Implementadas
  
-O sistema permite que novos usuários realizem cadastro com validação de e-mail e definição de senha forte. Para aumentar a segurança, a senha precisa conter no mínimo oito caracteres, letra maiúscula, número e caractere especial. Após o cadastro, a senha não é armazenada em texto puro, sendo protegida com criptografia utilizando bcrypt.
- 
-No processo de login, o sistema verifica as credenciais informadas e também possui proteção contra tentativas repetidas de acesso. Caso ocorram cinco erros consecutivos, a conta é bloqueada temporariamente por cinco minutos, reduzindo riscos de ataques por força bruta.
- 
-Após a validação correta da senha, é exigida uma segunda etapa de autenticação. O usuário recebe uma chave vinculada ao aplicativo Google Authenticator por meio de QR Code e deve informar o código temporário gerado no aplicativo. Também são disponibilizados códigos de backup para casos de perda de acesso ao autenticador.
- 
-Outro recurso implementado é o gerenciamento seguro de sessões. Após o login, a sessão permanece ativa por tempo limitado e pode ser encerrada manualmente pelo usuário através do logout. O sistema também impede o cache de páginas protegidas, evitando acesso indevido após o encerramento da sessão.
- 
-Além disso, foi criada uma funcionalidade inicial de recuperação de senha, permitindo redefinir o acesso por meio de token temporário, mas que ainda será refinada nos próximos passos.
+O sistema permite o cadastro de usuários com validação de e-mail e definição de senha forte, exigindo critérios mínimos de segurança. As senhas são armazenadas de forma protegida utilizando hash com bcrypt e salt. Durante o login, há verificação das credenciais e proteção contra ataques de força bruta, com bloqueio temporário após múltiplas tentativas inválidas. Após a autenticação inicial, é exigido um segundo fator (2FA), integrado ao Google Authenticator por meio de QR Code, além da disponibilização de códigos de backup armazenados de forma criptografada.
+
+O sistema também implementa criptografia de dados sensíveis, gerenciamento seguro de sessões com tempo de expiração e cookies protegidos, além de redirecionamento para HTTPS. Adicionalmente, são registrados logs de eventos relevantes, como tentativas de login e redefinições de senha, contribuindo para auditoria e monitoramento de segurança.
  
 ## Aplicação da LGPD
  
 O projeto foi desenvolvido considerando princípios importantes da LGPD, especialmente no tratamento seguro de dados pessoais. O sistema coleta apenas informações necessárias para funcionamento, como e-mail e senha criptografada, evitando excesso de dados armazenados.
  
 Também foram adotadas medidas técnicas de proteção, como criptografia, autenticação reforçada e controle de acesso, contribuindo para a privacidade e segurança das informações dos usuários.
+
+## Segurança Implementada
  
+O sistema incorpora diversas camadas de segurança:
+ 
+- Hash de senhas com bcrypt  
+- Criptografia de dados sensíveis  
+- Autenticação multifator (2FA)  
+- Tokens seguros para recuperação de senha  
+- Proteção contra ataques de força bruta  
+- Proteção contra enumeração de usuários  
+- Sessões seguras e controle de acesso  
  
 ## Conclusão
  
