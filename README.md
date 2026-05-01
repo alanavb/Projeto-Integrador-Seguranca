@@ -23,37 +23,37 @@ Desenvolver, implementar, documentar e comunicar cientificamente um sistema segu
 - **email-validator** – validação de e-mails  
  
 ## Estrutura do Projeto (MVC)
- 
-O projeto segue o padrão arquitetural **MVC (Model–View–Controller)** para melhor organização, separação de responsabilidades e escalabilidade.
- 
-│── app.py # Arquivo principal da aplicação, responsável por iniciar o servidor Flask, configurar sessões, segurança e registrar os controllers
-│── requirements.txt # Define as bibliotecas necessárias para rodar o projeto.
-│── .env # Arquivo de variáveis de ambiente utilizado para armazenar dados sensíveis
-│
-├── controllers/ # Gerencia o fluxo da aplicação: recebe requisições, aciona a lógica de negócio e retorna a resposta ao usuário.
-│ └── auth_controller.py
-│
-├── models/ # Responsável pela comunicação com o banco de dados.
-│ └── user_model.py
-│
-├── services/ # Responsável por funções auxiliares como validação de dados e criptografia.
-│ ├── crypto_service.py # Realiza criptografia e descriptografia de dados sensíveis, garantindo a proteção de informações como códigos de autenticação e backup.
-│ └── validation_service.py # Valida dados de entrada, assegurando conformidade com regras de segurança.
-│
-├── database/ # Responsável pela configuração e gerenciamento da conexão com o banco de dados.
-│ └── connection.py # Centraliza a conexão com o banco (MySQL), utilizando variáveis de ambiente para maior segurança.
-│
-├── templates/
-│ ├── login.html
-│ ├── cadastro.html
-│ ├── 2fa.html
-│ ├── qr.html
-│ ├── dashboard.html
-│ ├── recuperacao.html
-│ └── resetar.html
-│
-└── static/ # Armazena arquivos estáticos da aplicação
 
+O projeto segue o padrão arquitetural **MVC (Model–View–Controller)** para melhor organização, separação de responsabilidades e escalabilidade.
+```
+│── app.py             # Arquivo principal da aplicação, responsável por iniciar o servidor Flask, configurar sessões, segurança e registrar os controllers.
+│── requirements.txt   # Define as bibliotecas necessárias para rodar o projeto.
+│── .env               # Arquivo de variáveis de ambiente utilizado para armazenar dados sensíveis.
+│
+├── controllers/       # Gerencia o fluxo da aplicação: recebe requisições, aciona a lógica de negócio e retorna a resposta ao usuário.
+│   └── auth_controller.py
+│
+├── models/            # Responsável pela comunicação com o banco de dados.
+│   └── user_model.py
+│
+├── services/          # Responsável por funções auxiliares como validação de dados e criptografia.
+│   ├── crypto_service.py    # Realiza criptografia e descriptografia de dados sensíveis, como códigos de backup.
+│   └── validation_service.py # Valida dados de entrada, assegurando conformidade com regras de segurança.
+│
+├── database/          # Responsável pela configuração e gerenciamento da conexão com o banco de dados.
+│   └── connection.py  # Centraliza a conexão com o banco (MySQL), utilizando variáveis de ambiente para maior segurança.
+│
+├── templates/         # Contém as páginas HTML da aplicação (interface do usuário)
+│   ├── login.html
+│   ├── cadastro.html
+│   ├── 2fa.html
+│   ├── qr.html
+│   ├── dashboard.html
+│   ├── recuperacao.html
+│   └── resetar.html
+│
+└── static/            # Armazena arquivos estáticos da aplicação
+```
 ### Organização:
 - **Model** → acesso ao banco de dados  
 - **View** → interface (HTML)  
@@ -92,6 +92,7 @@ Dessa forma, o trabalho atende ao objetivo proposto pela disciplina e reforça a
 
 Para melhor visualização, apresentamos abaixo os testes realizados nas interfaces de cadastro, login e configuração de autenticação de dois fatores (2FA), e a tela de boas-vindas pós-autenticação do usuário.
 
-<img width="1781" height="988" alt="image" src="https://github.com/user-attachments/assets/752e1b97-fa70-4a98-ba2c-3612a9c0f75d" />
+<img width="1764" height="1022" alt="image" src="https://github.com/user-attachments/assets/28c7b088-cf9e-481e-add6-a4e35136a519" />
+
 
 #### Integrantes: Ágatha Mami Takaki Ayama | Alana Vagnini Barbosa | Ana Carolina da Silva
