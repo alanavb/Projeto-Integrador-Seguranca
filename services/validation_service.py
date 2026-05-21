@@ -8,7 +8,7 @@ def validar_email(email):
     if not email: return None
     try:
         email_info = validate_email(email, check_deliverability=False)
-        email = email_info.normalized
+        email = email_info.normalized.lower ()
         if not re.match(r"^[^@]+@[^@]+\.[^@]+$", email): return None
         return email
     except EmailNotValidError: return None
