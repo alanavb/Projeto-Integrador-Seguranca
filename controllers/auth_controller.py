@@ -73,6 +73,11 @@ def login():
 def cadastro():
     if request.method == "POST":
         email = validar_email(request.form.get("email"))
+
+        usuario_existente = get_user_by_email(email)
+        if usuario_existente:
+            return render_template("register.html", erro="Este e-mail já está em uso. Tente outro.")
+        
         senha = request.form.get("senha")
         confirmar = request.form.get("confirmar")
 
