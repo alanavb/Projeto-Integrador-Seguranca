@@ -11,7 +11,12 @@ import secrets
 
 from models.user_model import *
 from services.validation_service import validar_email, validar_senha
-from services.crypto_service import criptografar_dado, descriptografar_dado
+from services.crypto_service import (
+    criptografar_dado,
+    descriptografar_dado,
+    criptografar_chave_2fa,
+    descriptografar_chave_2fa,
+)
 from database.connection import get_db
 
 auth = Blueprint("auth", __name__)
@@ -53,7 +58,7 @@ def login():
             else:
                 update_tentativas(email, tentativas)
 
-            print(f"[AUDITORIA] Falha de login: {email}")
+            print("[AUDITORIA] Falha de login.")
             return render_template("login.html", erro="Usuário ou senha inválidos")
 
         limpar_bloqueio(email)
@@ -89,6 +94,7 @@ def cadastro():
 
         senha_hash = bcrypt.hashpw(senha.encode(), bcrypt.gensalt())
         chave_2fa = pyotp.random_base32()
+        chave_2fa_cripto = criptografar_chave_2fa(chave_2fa)
 
         ###############################################################################
         ## REQUISITO 3.4 - CRIPTOGRAFIA EM REPOUSO
@@ -97,7 +103,7 @@ def cadastro():
         backup_codes_cripto = criptografar_dado(json.dumps(backup_codes))
 
         try:
-            create_user(email, senha_hash, chave_2fa, backup_codes_cripto)
+            create_user(email, senha_hash, chave_2fa_cripto, backup_codes_cripto)
             session["sucesso"] = "Cadastro realizado com sucesso!"
             return redirect("/")
         except Exception as erro:
@@ -118,7 +124,7 @@ def twofa():
     resultado = get_2fa_data(email)
     if not resultado: return redirect("/")
 
-    chave_2fa = resultado[0]
+    chave_2fa = descriptografar_chave_2fa(resultado[0])
 
     ###############################################################################
     ## REQUISITO 3.4 - DESCRIPTOGRAFIA
@@ -137,7 +143,7 @@ def twofa():
 
         if totp.verify(codigo):
             session["user"] = email
-            print(f"[AUDITORIA] Login 2FA sucesso: {email}")
+            print("[AUDITORIA] Login 2FA realizado com sucesso.")
             return redirect("/dashboard")
 
         return render_template("2fa.html", erro="Código inválido")
@@ -158,7 +164,7 @@ def recuperacao():
             expiracao = int(time.time()) + 3600
             update_reset_token(email, token, expiracao)
 
-            print(f"[SEGURANÇA] Recuperação: http://localhost:5000/resetar?token={token}&email={email}")
+            print(f"[SEGURANÇA] Recuperação: https://localhost:5000/resetar?token={token}&email={email}")
 
         return render_template("recuperacao.html", sucesso="Instruções enviadas se o e-mail existir.")
 
@@ -184,7 +190,7 @@ def resetar():
         senha_hash = bcrypt.hashpw(nova_senha.encode(), bcrypt.gensalt())
         update_password(email, senha_hash)
 
-        print(f"[AUDITORIA] Senha redefinida para {email}")
+        print("[AUDITORIA] Senha redefinida com sucesso.")
         return render_template("login.html", sucesso="Senha redefinida com sucesso!")
 
     return render_template("resetar.html", email=email, token=token_url)
@@ -221,8 +227,9 @@ def qr():
 
     email = session["email_temp"]
     res = get_chave_2fa(email)
+    chave_2fa = descriptografar_chave_2fa(res[0])
 
-    totp = pyotp.TOTP(res[0])
+    totp = pyotp.TOTP(chave_2fa)
     uri = totp.provisioning_uri(name=email, issuer_name="Sistema_Seguro")
 
     img = qrcode.make(uri)

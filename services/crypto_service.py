@@ -1,7 +1,7 @@
 ###############################################################################
 ## REQUISITO 3.5 - USO DE ALGORITMO CRIPTOGRÁFICO 
 ###############################################################################
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 import os
 
 ###############################################################################
@@ -26,3 +26,15 @@ def descriptografar_dado(dado_cripto):
         return cipher_suite.decrypt(dado_cripto.encode()).decode()
     except:
         return "{}"  # Fallback para evitar quebra de sistema
+
+
+def criptografar_chave_2fa(chave_2fa):
+    return criptografar_dado(chave_2fa)
+
+
+def descriptografar_chave_2fa(chave_2fa_cripto):
+    try:
+        return cipher_suite.decrypt(chave_2fa_cripto.encode()).decode()
+    except InvalidToken:
+        # Mantém compatibilidade com contas criadas antes desta proteção.
+        return chave_2fa_cripto
