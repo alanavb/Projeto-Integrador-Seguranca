@@ -75,7 +75,7 @@ def cadastro():
         email = validar_email(request.form.get("email"))
 
         usuario_existente = get_user_by_email(email)
-        if usuario_existente: return render_template("register.html", erro="Este e-mail já está em uso. Tente outro.")
+        if usuario_existente: return render_template("cadastro.html", erro="E-mail ou senha inválidos.")
         
         senha = request.form.get("senha")
         confirmar = request.form.get("confirmar")
@@ -100,8 +100,9 @@ def cadastro():
             create_user(email, senha_hash, chave_2fa, backup_codes_cripto)
             session["sucesso"] = "Cadastro realizado com sucesso!"
             return redirect("/")
-        except:
-            return render_template("cadastro.html", erro="E-mail já cadastrado.")
+        except Exception as erro:
+            print(f"[ERRO] Falha ao cadastrar usuário: {erro}")
+            return render_template("cadastro.html", erro="E-mail ou senha inválidos.")
 
     return render_template("cadastro.html")
 
@@ -234,5 +235,63 @@ def qr():
 @auth.route("/qr-confirm", methods=["POST"])
 def qr_confirm():
     email = session.get("email_temp")
+    if not email:
+        return redirect("/")
+
+    usuario = get_user_by_email(email)
+    if not usuario or usuario[5]:
+        return redirect("/2fa")
+
     ativar_2fa(email)
-    return redirect("/2fa")
+    session["mostrar_backup_codes"] = True
+    return redirect("/backup-codes")
+
+
+###############################################################################
+## CÓDIGOS DE RECUPERAÇÃO DO 2FA
+###############################################################################
+@auth.route("/backup-codes", methods=["GET", "POST"])
+def backup_codes():
+    email = session.get("user")
+    if email:
+        resultado = get_2fa_data(email)
+        if not resultado:
+            return redirect("/")
+
+        codigos_novos = session.pop("novos_backup_codes", None)
+        codigos = codigos_novos or json.loads(descriptografar_dado(resultado[1]))
+        return render_template(
+            "backup_codes.html",
+            codigos=codigos,
+            conta_autenticada=True,
+            novos_codigos=bool(codigos_novos),
+        )
+
+    email = session.get("email_temp")
+    if not email:
+        return redirect("/")
+
+    if request.method == "POST":
+        return redirect("/2fa")
+
+    if not session.pop("mostrar_backup_codes", False):
+        return redirect("/2fa")
+
+    resultado = get_2fa_data(email)
+    if not resultado:
+        return redirect("/")
+
+    codigos = json.loads(descriptografar_dado(resultado[1]))
+    return render_template("backup_codes.html", codigos=codigos)
+
+
+@auth.route("/backup-codes/novos", methods=["POST"])
+def novos_backup_codes():
+    email = session.get("user")
+    if not email:
+        return redirect("/")
+
+    novos_codigos = [secrets.token_hex(4) for _ in range(5)]
+    update_backup_codes(email, criptografar_dado(json.dumps(novos_codigos)))
+    session["novos_backup_codes"] = novos_codigos
+    return redirect("/backup-codes")

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Códigos de recuperação</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h2>Guarde seus códigos de recuperação</h2>
+
+    <p>Use um destes códigos caso não consiga acessar o aplicativo autenticador.</p>
+    <p>Cada código só pode ser usado uma vez. Guarde-os em um local seguro.</p>
+
+    {% if novos_codigos %}
+        <div class="mensagem sucesso">Novos códigos foram gerados. Os códigos anteriores não funcionam mais.</div>
+    {% endif %}
+
+    <ul>
+        {% for codigo in codigos %}
+            <li><code>{{ codigo }}</code></li>
+        {% endfor %}
+    </ul>
+
+    {% if conta_autenticada %}
+        <form method="POST" action="/backup-codes/novos">
+            <button type="submit">Receber novos códigos</button>
+        </form>
+        <a href="/dashboard">Voltar para a conta</a>
+    {% else %}
+        <form method="POST">
+            <button type="submit">Guardei os códigos, continuar</button>
+        </form>
+    {% endif %}
+
+</body>
+</html>
