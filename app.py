@@ -3,13 +3,13 @@ from datetime import timedelta
 from dotenv import load_dotenv
 import os
 
-# IMPORT DO CONTROLLER
-from controllers.auth_controller import auth
-
 ###############################################################################
 ## CARREGAR VARIÁVEIS DE AMBIENTE
 ###############################################################################
 load_dotenv()
+
+# O .env deve ser carregado antes dos imports que usam chaves criptográficas.
+from controllers.auth_controller import auth
 
 app = Flask(__name__)
 
@@ -23,7 +23,7 @@ app.secret_key = os.getenv("SECRET_KEY", "supersecret")
 ###############################################################################
 @app.before_request
 def forcar_https():
-    if not request.is_secure and app.env != "development":
+    if not request.is_secure:
         url_segura = request.url.replace("http://", "https://", 1)
         return redirect(url_segura, code=301)
 
