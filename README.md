@@ -95,4 +95,4 @@ Para melhor visualização, apresentamos abaixo os testes realizados nas interfa
 <img width="1764" height="1022" alt="image" src="https://github.com/user-attachments/assets/28c7b088-cf9e-481e-add6-a4e35136a519" />
 
 
-#### Integrantes: Ágatha Mami Takaki Ayama | Alana Vagnini Barbosa | Ana Carolina da Silva
+#### Integrantes: Ágatha Mami Takaki Ayama | Alana Vagnini Barbosa | Ana Carolina da Silva | Danilo de Oliveira
